@@ -5,6 +5,7 @@ import '../models/currency_model.dart';
 
 abstract class CurrencyRemoteDataSource {
   Future<List<CurrencyModel>> getAllCurrencies();
+  Future<List<CurrencyModel>> getHistoricalCurrencies();
 }
 
 const BASE_URL = "https://jsonplaceholder.typicode.com";
@@ -26,6 +27,24 @@ class CurrencyRemoteDataSourceImpl implements CurrencyRemoteDataSource {
           .map<CurrencyModel>((jsonCurrencyModel) => CurrencyModel.fromJson(jsonCurrencyModel))
           .toList();
 
+      return currencyModels;
+    } else {
+      throw ServerException();
+    }
+  }
+
+  @override
+  Future<List<CurrencyModel>> getHistoricalCurrencies() async{
+    final response = await client.get(
+      Uri.parse(BASE_URL + "/posts/"),
+      headers: {"Content-Type": "application/json"},
+    );
+
+    if (response.statusCode == 200) {
+      final List decodedJson = json.decode(response.body) as List;
+      final List<CurrencyModel> currencyModels = decodedJson
+          .map<CurrencyModel>((jsonCurrencyModel) => CurrencyModel.fromJson(jsonCurrencyModel))
+          .toList();
       return currencyModels;
     } else {
       throw ServerException();

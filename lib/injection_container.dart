@@ -1,3 +1,5 @@
+import 'package:currencyconverter_clean_arch/features/currencies/domain/usecases/get_historical_currencies.dart';
+
 import 'features/currencies/data/datasources/currency_local_data_source.dart';
 import 'features/currencies/data/datasources/currency_remote_data_source.dart';
 import 'features/currencies/data/repositories/currency_repository_impl.dart';
@@ -15,11 +17,12 @@ Future<void> setup() async {
 
 // Bloc
 
-  sl.registerFactory(() => CurrenciesBloc(getAllCurrencies: sl()));
+  sl.registerFactory(() => CurrenciesBloc(getAllCurrencies: sl(), getHistoricalCurrencies: sl()));
 
 // UseCases
 
   sl.registerLazySingleton(() => GetAllCurrenciesUseCase(sl()));
+  sl.registerLazySingleton(() => GetHistoricalCurrenciesUseCase(sl()));
 
 // Repository
 

@@ -1,4 +1,5 @@
 import 'package:bloc/bloc.dart';
+import 'package:currencyconverter_clean_arch/features/currencies/domain/usecases/get_historical_currencies.dart';
 import 'package:equatable/equatable.dart';
 import '../../../../../core/error/failures.dart';
 import '../../../../../core/strings/failures.dart';
@@ -12,14 +13,22 @@ part 'currencies_state.dart';
 
 class CurrenciesBloc extends Bloc<CurrenciesEvent, CurrenciesState> {
   final GetAllCurrenciesUseCase getAllCurrencies;
+  final GetHistoricalCurrenciesUseCase getHistoricalCurrencies;
   CurrenciesBloc({
     required this.getAllCurrencies,
+    required this.getHistoricalCurrencies,
   }) : super(CurrenciesInitial()) {
     on<CurrenciesEvent>((event, emit) async {
       if (event is GetAllCurrenciesEvent) {
         emit(LoadingCurrenciesState());
 
         final failureOrCurrencies = await getAllCurrencies();
+        emit(_mapFailureOrCurrenciesToState(failureOrCurrencies));
+      }
+      else if (event is GetHistoricalCurrenciesEvent){
+        emit(LoadingCurrenciesState());
+
+        final failureOrCurrencies = await getHistoricalCurrencies();
         emit(_mapFailureOrCurrenciesToState(failureOrCurrencies));
       }
     });

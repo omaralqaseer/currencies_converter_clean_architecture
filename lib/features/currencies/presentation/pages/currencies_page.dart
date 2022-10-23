@@ -36,8 +36,5 @@ class CurrenciesPage extends StatelessWidget {
     );
   }
 
-  // Future<void> _onRefresh(BuildContext context) async {
-  //   BlocProvider.of<CurrenciesBloc>(context).add(RefreshCurrenciesEvent());
-  // }
 
 }
