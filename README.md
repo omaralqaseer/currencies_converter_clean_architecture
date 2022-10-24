@@ -10,7 +10,7 @@ for each feature started from domain layer specifically entity like Currency the
 
 B- Used Singleton Design Pattern with local Database to let one database connection over application (project)
 
-C- /// Not Used image loader but it use for caching network image for facilitate future usage.
+C- /// image loader N/A .
 
 
 D- Use Sqflite Database to store data locally (Caching) with structured format after first API request and read data from local database in future

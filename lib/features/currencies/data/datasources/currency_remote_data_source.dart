@@ -1,6 +1,8 @@
 import 'dart:convert';
 import '../../../../core/error/exceptions.dart';
 import 'package:http/http.dart' as http;
+import '../../../../core/network/api_keys.dart';
+import '../../../../core/network/end_points.dart';
 import '../models/currency_model.dart';
 
 abstract class CurrencyRemoteDataSource {
@@ -8,7 +10,7 @@ abstract class CurrencyRemoteDataSource {
   Future<List<CurrencyModel>> getHistoricalCurrencies();
 }
 
-const BASE_URL = "https://jsonplaceholder.typicode.com";
+// const BASE_URL = "https://jsonplaceholder.typicode.com";
 
 class CurrencyRemoteDataSourceImpl implements CurrencyRemoteDataSource {
   final http.Client client;
@@ -17,7 +19,8 @@ class CurrencyRemoteDataSourceImpl implements CurrencyRemoteDataSource {
   @override
   Future<List<CurrencyModel>> getAllCurrencies() async {
     final response = await client.get(
-      Uri.parse(BASE_URL + "/posts/"),
+      // Uri.parse(BASE_URL + "/posts/"),
+      Uri.parse(EndPoints.BASE_URL + "/currencies?apiKey=${ApiKeys.CURRENCY_CONVERTER}"),
       headers: {"Content-Type": "application/json"},
     );
 
@@ -36,7 +39,7 @@ class CurrencyRemoteDataSourceImpl implements CurrencyRemoteDataSource {
   @override
   Future<List<CurrencyModel>> getHistoricalCurrencies() async{
     final response = await client.get(
-      Uri.parse(BASE_URL + "/posts/"),
+      Uri.parse(EndPoints.BASE_URL + "/currencies?apiKey=${ApiKeys.CURRENCY_CONVERTER}"),
       headers: {"Content-Type": "application/json"},
     );
 

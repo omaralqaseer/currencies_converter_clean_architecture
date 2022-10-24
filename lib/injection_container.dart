@@ -1,5 +1,5 @@
+import 'package:currencyconverter_clean_arch/features/currencies/data/database/db.dart';
 import 'package:currencyconverter_clean_arch/features/currencies/domain/usecases/get_historical_currencies.dart';
-
 import 'features/currencies/data/datasources/currency_local_data_source.dart';
 import 'features/currencies/data/datasources/currency_remote_data_source.dart';
 import 'features/currencies/data/repositories/currency_repository_impl.dart';
@@ -8,7 +8,6 @@ import 'features/currencies/domain/usecases/get_all_currencies.dart';
 import 'features/currencies/presentation/bloc/currencies/currencies_bloc.dart';
 import 'package:get_it/get_it.dart';
 import 'package:http/http.dart' as http;
-import 'package:shared_preferences/shared_preferences.dart';
 
 final sl = GetIt.instance;
 
@@ -17,7 +16,8 @@ Future<void> setup() async {
 
 // Bloc
 
-  sl.registerFactory(() => CurrenciesBloc(getAllCurrencies: sl(), getHistoricalCurrencies: sl()));
+  sl.registerFactory(() =>
+      CurrenciesBloc(getAllCurrencies: sl(), getHistoricalCurrencies: sl()));
 
 // UseCases
 
@@ -27,24 +27,20 @@ Future<void> setup() async {
 // Repository
 
   sl.registerLazySingleton<CurrenciesRepository>(() => CurrenciesRepositoryImpl(
-      remoteDataSource: sl(), localDataSource: sl(), ));
+        remoteDataSource: sl(),
+        localDataSource: sl(),
+      ));
 //networkInfo: sl()
 // DataSources
 
   sl.registerLazySingleton<CurrencyRemoteDataSource>(
       () => CurrencyRemoteDataSourceImpl(client: sl()));
   sl.registerLazySingleton<CurrencyLocalDataSource>(
-      () => CurrencyLocalDataSourceImpl(sharedPreferences: sl()));
+      () => CurrencyLocalDataSourceImpl(currenciesDatabaseHelper: sl()));
 
 //! Core
 
-  // sl.registerLazySingleton<NetworkInfo>(() => NetworkInfoImpl(sl()));
-
 //! External
-
-
-  final sharedPreferences = await SharedPreferences.getInstance();
-  sl.registerLazySingleton(() => sharedPreferences);
+  sl.registerLazySingleton(() => CurrenciesDatabaseHelper.instance);
   sl.registerLazySingleton(() => http.Client());
-  // sl.registerLazySingleton(() => InternetConnectionChecker());
 }
