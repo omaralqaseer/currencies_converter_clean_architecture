@@ -1,16 +1,17 @@
 # currencyconverter_clean_arch
 
-A new Flutter project.
+A clean architecture currency converter Flutter project.
 
 ## Getting Started
 
-This project is a starting point for a Flutter application.
+A- This project is a build in clean architecture pattern (data -domain- presentation layers)
+for each feature started from domain layer specifically entity like Currency then use cases then repository and bloc and finish with data source and UI .
 
-A few resources to get you started if this is your first Flutter project:
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+B- Used Singleton Design Pattern with local Database to let one database connection over application (project)
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+C- /// Not Used image loader but it use for caching network image for facilitate future usage.
+
+
+D- Use Sqflite Database to store data locally (Caching) with structured format after first API request and read data from local database in future
+   to facilitate get data.
