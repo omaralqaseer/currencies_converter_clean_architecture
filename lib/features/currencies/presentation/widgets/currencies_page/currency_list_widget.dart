@@ -19,11 +19,11 @@ class CurrencyListWidget extends StatelessWidget {
         return ListTile(
           leading: Text(currencies[index].id.toString()),
           title: Text(
-            currencies[index].title,
+            currencies[index].name,
             style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
           ),
           subtitle: Text(
-            currencies[index].body,
+            currencies[index].code,
             style: const TextStyle(fontSize: 16),
           ),
           contentPadding: const EdgeInsets.symmetric(horizontal: 10),

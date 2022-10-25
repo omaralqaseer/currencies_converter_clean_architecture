@@ -2,15 +2,15 @@ import 'package:equatable/equatable.dart';
 
 class Currency extends Equatable {
   final int? id;
-  final String title;
-  final String body;
+  final String name;
+  final String code;
 
   const Currency({
     this.id,
-    required this.title,
-    required this.body,
+    required this.name,
+    required this.code,
   });
 
   @override
-  List<Object?> get props => [id, title, body];
+  List<Object?> get props => [id, name, code];
 }

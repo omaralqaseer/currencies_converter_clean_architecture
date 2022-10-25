@@ -1,9 +1,12 @@
+import '/features/currencies/data/models/currency_model.dart';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
+import 'db_types.dart';
 
 class CurrenciesDatabaseHelper {
   ///Singleton Design Pattern
-  static final CurrenciesDatabaseHelper instance = CurrenciesDatabaseHelper._init();
+  static final CurrenciesDatabaseHelper instance =
+      CurrenciesDatabaseHelper._init();
 
   static Database? _currenciesDatabase;
 
@@ -24,52 +27,34 @@ class CurrenciesDatabaseHelper {
   }
 
   Future _createDB(Database db, int version) async {
-
-// if you have another table add here  like below ..
-//     await db.execute('''
-// CREATE TABLE $tableUserInfo (
-//   ${UserInfoFields.id} $idType,
-//   ${UserInfoFields.token} $textType,
-//   ${UserInfoFields.firstName} $textType,
-//   ${UserInfoFields.timestamp} $integerType,
-//   ${UserInfoFields.name} $textType,
-//   ${UserInfoFields.email} $textType,
-//   ${UserInfoFields.username} $textType,
-//   ${UserInfoFields.deviceType} $textType,
-//   ${UserInfoFields.lastName} $textType
-//   )
-// ''');
-//
+//  // ${UserInfoFields.timestamp} $integerType
+    await db.execute('''
+CREATE TABLE $tableCurrency (
+  ${CurrencyFields.id} $idType,
+  ${CurrencyFields.name} $textType,
+  ${CurrencyFields.code} $textType
+  )
+''');
   }
 
+  Future<void> createCurrency(Map<String,dynamic> jsonCurrency) async {
+    final db = await instance.database;
+    await db.insert(tableCurrency, jsonCurrency,
+        conflictAlgorithm: ConflictAlgorithm.replace);
+  }
 
+  Future<List<Map<String, Object?>>> readCurrenciesJson() async {
+    final db = await instance.database;
+    final result = await db.query(
+      tableCurrency,
+      columns: CurrencyFields.values,
+    );
+    return result;
 
+  }
 
-  // Future<ConstantModel> createConstantInfo(ConstantModel constantModel) async {
-  //   final db = await instance.database;
-  //   final id = await db.insert(tableConstant, constantModel.toJson(),
-  //       conflictAlgorithm: ConflictAlgorithm.replace);
-  //   return constantModel.copy(id: id);
-  // }
-  //
-  // Future<ConstantModel> readConstant(int id) async {
-  //   final db = await instance.database;
-  //   final maps = await db.query(
-  //     tableConstant,
-  //     columns: ConstantFields.values,
-  //     where: '${ConstantFields.id} = ?',
-  //     whereArgs: [id],
-  //   );
-  //   if (maps.isNotEmpty) {
-  //     return ConstantModel.fromLocalJson(maps.first);
-  //   } else {
-  //     throw Exception('ID $id not found');
-  //   }
-  // }
-
-
-  // Future close() async {
-  //   final db = await instance.database;
-  //   db.close();
-  // }
+Future close() async {
+  final db = await instance.database;
+  db.close();
+}
 }

@@ -1,44 +1,37 @@
 import 'package:dartz/dartz.dart';
+import '../../../../core/error/exceptions.dart';
 import '../database/db.dart';
 import '../models/currency_model.dart';
 
 abstract class CurrencyLocalDataSource {
   Future<List<CurrencyModel>> getCachedCurrencies();
+
   Future<Unit> cacheCurrencies(List<CurrencyModel> currencyModels);
 }
 
 const cachedCurrencies = "cached_currencies";
 
 class CurrencyLocalDataSourceImpl implements CurrencyLocalDataSource {
-  final  CurrenciesDatabaseHelper currenciesDatabaseHelper;
+  final CurrenciesDatabaseHelper currenciesDatabaseHelper;
 
   CurrencyLocalDataSourceImpl({required this.currenciesDatabaseHelper});
+
   @override
   Future<Unit> cacheCurrencies(List<CurrencyModel> currencyModels) {
-    List currencyModelsToJson = currencyModels
-        .map<Map<String, dynamic>>((currencyModel) => currencyModel.toJson())
-        .toList();
-    // currenciesDatabaseHelper.setString(cachedCurrencies, json.encode(currencyModelsToJson));
-    return Future.value(unit);
+    currencyModels.map((currencyModel) =>
+        currenciesDatabaseHelper.createCurrency(currencyModel.toJson()));
+     return Future.value(unit);
   }
 
   @override
-  Future<List<CurrencyModel>> getCachedCurrencies() {
-    // TODO: implement getCachedCurrencies
-    throw UnimplementedError();
+  Future<List<CurrencyModel>> getCachedCurrencies() async {
+    final jsonCurrencies = await currenciesDatabaseHelper.readCurrenciesJson();
+    if (jsonCurrencies.isNotEmpty) {
+      return jsonCurrencies
+          .map((json) => CurrencyModel.fromJson(json))
+          .toList();
+    } else {
+      throw EmptyCacheException();
+    }
   }
-
-  // @override
-  // Future<List<CurrencyModel>> getCachedCurrencies() {
-    // final jsonString = sharedPreferences.getString(cachedCurrencies);
-    // if (jsonString != null) {
-    //   List decodeJsonData = json.decode(jsonString);
-    //   List<CurrencyModel> jsonToCurrencyModels = decodeJsonData
-    //       .map<CurrencyModel>((jsonCurrencyModel) => CurrencyModel.fromJson(jsonCurrencyModel))
-    //       .toList();
-    //   return Future.value(jsonToCurrencyModels);
-    // } else {
-    //   throw EmptyCacheException();
-    // }
-  // }
 }

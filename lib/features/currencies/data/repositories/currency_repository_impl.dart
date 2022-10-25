@@ -17,25 +17,19 @@ class CurrenciesRepositoryImpl implements CurrenciesRepository {
 
   @override
   Future<Either<Failure, List<Currency>>> getAllCurrencies() async {
-    // if (await networkInfo.isConnected) {
     try {
-      final remoteCurrencies = await remoteDataSource.getAllCurrencies();
-      localDataSource.cacheCurrencies(remoteCurrencies);
-      return Right(remoteCurrencies);
-    } on ServerException {
-      return Left(ServerFailure());
+      final localCurrencies = await localDataSource.getCachedCurrencies();
+      return Right(localCurrencies);
+    } on EmptyCacheException {
+      try {
+        final remoteCurrencies = await remoteDataSource.getAllCurrencies();
+        localDataSource.cacheCurrencies(remoteCurrencies);
+        return Right(remoteCurrencies);
+      } on ServerException {
+        return Left(ServerFailure());
+      }
     }
   }
-
-  // else {
-  //   try {
-  //     final localCurrencies = await localDataSource.getCachedCurrencies();
-  //     return Right(localCurrencies);
-  //   } on EmptyCacheException {
-  //     return Left(EmptyCacheFailure());
-  //   }
-  // }
-  // }
 
   @override
   Future<Either<Failure, List<Currency>>> getHistoricalCurrencies() async {
