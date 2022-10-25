@@ -1,8 +1,8 @@
+import 'package:currencyconverter_clean_arch/features/currencies/presentation/pages/home_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'core/app_theme.dart';
 import 'features/currencies/presentation/bloc/currencies/currencies_bloc.dart';
-import 'features/currencies/presentation/pages/currencies_page.dart';
 import 'injection_container.dart' as di;
 
 void main() async {
@@ -19,12 +19,13 @@ class MyApp extends StatelessWidget {
     return MultiBlocProvider(
         providers: [
           BlocProvider(
-              create: (_) => di.sl<CurrenciesBloc>()..add(GetAllCurrenciesEvent())),
+              create: (_) =>
+                  di.sl<CurrenciesBloc>()..add(GetAllCurrenciesEvent())),
         ],
         child: MaterialApp(
             debugShowCheckedModeBanner: false,
             theme: appTheme,
             title: 'Currency Converter APP',
-            home:const CurrenciesPage()));
+            home: const HomePage()));
   }
 }
