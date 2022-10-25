@@ -27,7 +27,6 @@ class CurrenciesDatabaseHelper {
   }
 
   Future _createDB(Database db, int version) async {
-//  // ${UserInfoFields.timestamp} $integerType
     await db.execute('''
 CREATE TABLE $tableCurrency (
   ${CurrencyFields.primaryID} $idType,
@@ -38,28 +37,25 @@ CREATE TABLE $tableCurrency (
 ''');
   }
 
-  Future<void> createCurrency(Map<String,dynamic> jsonCurrency) async {
-
-
-      final db = await instance.database;
-      await db.insert(tableCurrency, jsonCurrency,
-          conflictAlgorithm: ConflictAlgorithm.replace).then((value) {
-
-      });
+  Future<void> createCurrency(Map<String, dynamic> jsonCurrency) async {
+    final db = await instance.database;
+    await db
+        .insert(tableCurrency, jsonCurrency,
+            conflictAlgorithm: ConflictAlgorithm.replace)
+        .then((value) {});
   }
 
   Future<List<Map<String, Object?>>> readCurrenciesJson() async {
-      final db = await instance.database;
-      final result = await db.query(
-        tableCurrency,
-        columns: CurrencyFields.values,
-      );
-      return result;
-    }
+    final db = await instance.database;
+    final result = await db.query(
+      tableCurrency,
+      columns: CurrencyFields.values,
+    );
+    return result;
+  }
 
-
-Future close() async {
-  final db = await instance.database;
-  db.close();
-}
+  Future close() async {
+    final db = await instance.database;
+    db.close();
+  }
 }
