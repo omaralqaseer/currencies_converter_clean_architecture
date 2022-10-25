@@ -17,13 +17,13 @@ class CurrencyListWidget extends StatelessWidget {
       itemCount: currencies.length,
       itemBuilder: (context, index) {
         return ListTile(
-          leading: Text(currencies[index].id.toString()),
+          leading: Text(currencies[index].id!),
           title: Text(
-            currencies[index].name,
+            currencies[index].currencyName,
             style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
           ),
           subtitle: Text(
-            currencies[index].code,
+            currencies[index].currencySymbol,
             style: const TextStyle(fontSize: 16),
           ),
           contentPadding: const EdgeInsets.symmetric(horizontal: 10),

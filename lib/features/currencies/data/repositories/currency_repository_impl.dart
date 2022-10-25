@@ -1,3 +1,4 @@
+import 'package:currencyconverter_clean_arch/features/currencies/data/models/currency_model.dart';
 import 'package:dartz/dartz.dart';
 import '../../../../core/error/exceptions.dart';
 import '../../../../core/error/failures.dart';
@@ -22,8 +23,8 @@ class CurrenciesRepositoryImpl implements CurrenciesRepository {
       return Right(localCurrencies);
     } on EmptyCacheException {
       try {
-        final remoteCurrencies = await remoteDataSource.getAllCurrencies();
-        localDataSource.cacheCurrencies(remoteCurrencies);
+        final List<CurrencyModel> remoteCurrencies = await remoteDataSource.getAllCurrencies();
+       await localDataSource.cacheCurrencies(remoteCurrencies);
         return Right(remoteCurrencies);
       } on ServerException {
         return Left(ServerFailure());

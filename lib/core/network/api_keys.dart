@@ -1,4 +1,4 @@
 class ApiKeys{
-  static const CURRENCY_CONVERTER = 'pr_ca566c61d9a841d6a37b94ecde245a35';
+  static const CURRENCY_CONVERTER = '66c2d9bfff9dbcc5e82c';
 
 }

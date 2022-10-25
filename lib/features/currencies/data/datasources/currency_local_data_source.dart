@@ -17,9 +17,10 @@ class CurrencyLocalDataSourceImpl implements CurrencyLocalDataSource {
   CurrencyLocalDataSourceImpl({required this.currenciesDatabaseHelper});
 
   @override
-  Future<Unit> cacheCurrencies(List<CurrencyModel> currencyModels) {
-    currencyModels.map((currencyModel) =>
-        currenciesDatabaseHelper.createCurrency(currencyModel.toJson()));
+  Future<Unit> cacheCurrencies(List<CurrencyModel> currencyModels){
+    for (CurrencyModel currencyModel in currencyModels) {
+      currenciesDatabaseHelper.createCurrency(currencyModel.toJson());
+    }
      return Future.value(unit);
   }
 
