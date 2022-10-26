@@ -1,18 +1,17 @@
 import 'dart:convert';
 import 'package:flutter/foundation.dart';
-
 import '../../../../core/error/exceptions.dart';
 import 'package:http/http.dart' as http;
 import '../../../../core/network/api_keys.dart';
 import '../../../../core/network/end_points.dart';
 import '../models/currency_model.dart';
+import '../models/historical_model.dart';
 
 abstract class CurrencyRemoteDataSource {
   Future<List<CurrencyModel>> getAllCurrencies();
 
-  Future<List<CurrencyModel>> getHistoricalCurrencies();
+  Future<List<HistoricalModel>> getHistoricalCurrencies();
 }
-
 
 class CurrencyRemoteDataSourceImpl implements CurrencyRemoteDataSource {
   final http.Client client;
@@ -28,14 +27,13 @@ class CurrencyRemoteDataSourceImpl implements CurrencyRemoteDataSource {
     );
 
     if (response.statusCode == 200) {
-      final  jsonBody = json.decode(response.body) ;
+      final jsonBody = json.decode(response.body);
       var list = jsonBody["results"];
       List<String> currenciesKeys = (list.keys).toList();
       List<CurrencyModel> currencyModels = [];
       for (String c in currenciesKeys) {
         currencyModels.add(CurrencyModel.fromJson(list[c]));
       }
-      // debugPrint('currencies is $currencyModels');
       return currencyModels;
     } else {
       throw ServerException();
@@ -43,25 +41,37 @@ class CurrencyRemoteDataSourceImpl implements CurrencyRemoteDataSource {
   }
 
   @override
-  Future<List<CurrencyModel>> getHistoricalCurrencies() async {
+  Future<List<HistoricalModel>> getHistoricalCurrencies() async {
     DateTime now = DateTime.now();
     DateTime beforeWeek = now.subtract(const Duration(days: 7));
+    String startDate =
+        "${beforeWeek.year}-${beforeWeek.month}-${beforeWeek.day}";
+    String endDate = "${now.year}-${now.month}-${now.day}";
+    String fromCurrency = "USD";
+    String toCurrency = "EUR";
+    String convert = "${fromCurrency}_$toCurrency";
     final response = await client.get(
       Uri.parse(EndPoints.BASE_URL +
-          "/convert?q=USD_PHP,PHP_USD&compact=ultra&date=${beforeWeek.year}-${beforeWeek.month}-${beforeWeek.day}&endDate=${beforeWeek.year}-${beforeWeek.month}-${beforeWeek.day}&apiKey=${ApiKeys.CURRENCY_CONVERTER}"),
+          "/convert?q=$convert&compact=ultra&date=$startDate&endDate=$endDate&apiKey=${ApiKeys.CURRENCY_CONVERTER}"),
       headers: {"Content-Type": "application/json"},
     );
 
     if (response.statusCode == 200) {
-      final List decodedJson = json.decode(response.body) as List;
-      final List<CurrencyModel> currencyModels = decodedJson
-          .map<CurrencyModel>(
-              (jsonCurrencyModel) => CurrencyModel.fromJson(jsonCurrencyModel))
+      final responseBody = jsonDecode(response.body);
+
+      final keyList = responseBody[convert] as Map;
+      final historicalModels = keyList.keys
+          .map((key) => HistoricalModel(
+                fromCurrency: fromCurrency,
+                toCurrency: toCurrency,
+                date: key,
+                value: keyList[key],
+              ))
           .toList();
-      return currencyModels;
+      return historicalModels;
     } else {
-      debugPrint('status is ${response.statusCode}  body is ${jsonDecode(response.body)['error']} ');
-      response.body;
+      debugPrint(
+          'status is ${response.statusCode}  error is ${jsonDecode(response.body)['error']} ');
       throw ServerException();
     }
   }

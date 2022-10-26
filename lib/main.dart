@@ -18,9 +18,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiBlocProvider(
         providers: [
-          BlocProvider(
-              create: (_) =>
-                  di.sl<CurrenciesBloc>()..add(GetAllCurrenciesEvent())),
+          BlocProvider(create: (_) => di.sl<CurrenciesBloc>()),
         ],
         child: MaterialApp(
             debugShowCheckedModeBanner: false,

@@ -1,31 +1,34 @@
 import 'package:flutter/material.dart';
-import '../../../domain/entities/currency.dart';
 
+import '../../../domain/entities/historical.dart';
 
-class CurrencyListWidget extends StatelessWidget {
-  final List<Currency> currencies;
-  const CurrencyListWidget({
+class HistoricalCurrencyListWidget extends StatelessWidget {
+  final List<Historical> lstHistorical;
+
+  const HistoricalCurrencyListWidget({
     Key? key,
-    required this.currencies,
+    required this.lstHistorical,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return ListView.separated(
       shrinkWrap: true,
-      itemCount: currencies.length,
+      itemCount: lstHistorical.length,
       itemBuilder: (context, index) {
         return ListTile(
-          leading: Text(currencies[index].id!),
+          leading: Text(
+              '${lstHistorical[index].fromCurrency} - ${lstHistorical[index].toCurrency}'),
           title: Text(
-            currencies[index].currencyName,
+            lstHistorical[index].value.toString(),
             style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
           ),
           subtitle: Text(
-            currencies[index].currencySymbol,
+            lstHistorical[index].date,
             style: const TextStyle(fontSize: 16),
           ),
           contentPadding: const EdgeInsets.symmetric(horizontal: 10),
+          onTap: () {},
         );
       },
       separatorBuilder: (context, index) => const Divider(thickness: 1),

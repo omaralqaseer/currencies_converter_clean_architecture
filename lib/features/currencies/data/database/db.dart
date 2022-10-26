@@ -41,8 +41,7 @@ CREATE TABLE $tableCurrency (
     final db = await instance.database;
     await db
         .insert(tableCurrency, jsonCurrency,
-            conflictAlgorithm: ConflictAlgorithm.replace)
-        .then((value) {});
+            conflictAlgorithm: ConflictAlgorithm.replace);
   }
 
   Future<List<Map<String, Object?>>> readCurrenciesJson() async {

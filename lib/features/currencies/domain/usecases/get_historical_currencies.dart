@@ -1,7 +1,6 @@
 import 'package:dartz/dartz.dart';
-
 import '../../../../core/error/failures.dart';
-import '../entities/currency.dart';
+import '../entities/historical.dart';
 import '../repositories/currencies_repository.dart';
 
 class GetHistoricalCurrenciesUseCase {
@@ -9,7 +8,7 @@ class GetHistoricalCurrenciesUseCase {
 
   GetHistoricalCurrenciesUseCase(this.repository);
 
-  Future<Either<Failure, List<Currency>>> call() async {
+  Future<Either<Failure, List<Historical>>> call() async {
     return await repository.getHistoricalCurrencies();
   }
 }

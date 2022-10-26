@@ -22,6 +22,15 @@ class LoadedCurrenciesState extends CurrenciesState {
   List<Object> get props => [currencies];
 }
 
+class LoadedHistoricalCurrenciesState extends CurrenciesState {
+  final List<Historical> historical;
+
+  const LoadedHistoricalCurrenciesState({required this.historical});
+
+  @override
+  List<Object> get props => [historical];
+}
+
 class ErrorCurrenciesState extends CurrenciesState {
   final String message;
 

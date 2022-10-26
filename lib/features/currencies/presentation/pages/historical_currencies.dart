@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../core/widgets/loading_widget.dart';
 import '../bloc/currencies/currencies_bloc.dart';
+import '../widgets/historical_page/historical_currency_list.dart';
 import '../widgets/currencies_page/message_display_widget.dart';
 
 class HistoricalCurrenciesPage extends StatefulWidget {
@@ -38,9 +39,8 @@ Widget _buildBody() {
       builder: (context, state) {
         if (state is LoadingCurrenciesState) {
           return const LoadingWidget();
-        } else if (state is LoadedCurrenciesState) {
-          return const Text('Historical //');
-          // return  CurrencyListWidget(currencies: state.currencies);
+        } else if (state is LoadedHistoricalCurrenciesState) {
+          return HistoricalCurrencyListWidget(lstHistorical: state.historical);
         } else if (state is ErrorCurrenciesState) {
           return MessageDisplayWidget(message: state.message);
         }

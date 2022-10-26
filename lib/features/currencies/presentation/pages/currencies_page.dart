@@ -5,9 +5,20 @@ import '../bloc/currencies/currencies_bloc.dart';
 import '../widgets/currencies_page/currency_list_widget.dart';
 import '../widgets/currencies_page/message_display_widget.dart';
 
-class CurrenciesPage extends StatelessWidget {
+class CurrenciesPage extends StatefulWidget {
   const CurrenciesPage({Key? key}) : super(key: key);
+  @override
+  State<CurrenciesPage> createState() =>
+      _CurrenciesPageState();
+}
 
+class _CurrenciesPageState extends State<CurrenciesPage> {
+  @override
+  void initState() {
+    super.initState();
+    BlocProvider.of<CurrenciesBloc>(context)
+        .add(GetAllCurrenciesEvent());
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -35,6 +46,8 @@ class CurrenciesPage extends StatelessWidget {
       ),
     );
   }
+
+
 
 
 }

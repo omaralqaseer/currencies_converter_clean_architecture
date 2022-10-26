@@ -1,11 +1,12 @@
-import 'package:currencyconverter_clean_arch/features/currencies/data/models/currency_model.dart';
 import 'package:dartz/dartz.dart';
 import '../../../../core/error/exceptions.dart';
 import '../../../../core/error/failures.dart';
 import '../../domain/entities/currency.dart';
+import '../../domain/entities/historical.dart';
 import '../../domain/repositories/currencies_repository.dart';
 import '../datasources/currency_local_data_source.dart';
 import '../datasources/currency_remote_data_source.dart';
+import '../models/currency_model.dart';
 
 class CurrenciesRepositoryImpl implements CurrenciesRepository {
   final CurrencyRemoteDataSource remoteDataSource;
@@ -23,8 +24,9 @@ class CurrenciesRepositoryImpl implements CurrenciesRepository {
       return Right(localCurrencies);
     } on EmptyCacheException {
       try {
-        final List<CurrencyModel> remoteCurrencies = await remoteDataSource.getAllCurrencies();
-       await localDataSource.cacheCurrencies(remoteCurrencies);
+        final List<CurrencyModel> remoteCurrencies =
+            await remoteDataSource.getAllCurrencies();
+        await localDataSource.cacheCurrencies(remoteCurrencies);
         return Right(remoteCurrencies);
       } on ServerException {
         return Left(ServerFailure());
@@ -33,7 +35,7 @@ class CurrenciesRepositoryImpl implements CurrenciesRepository {
   }
 
   @override
-  Future<Either<Failure, List<Currency>>> getHistoricalCurrencies() async {
+  Future<Either<Failure, List<Historical>>> getHistoricalCurrencies() async {
     try {
       final remoteHistoricalCurrencies =
           await remoteDataSource.getHistoricalCurrencies();
