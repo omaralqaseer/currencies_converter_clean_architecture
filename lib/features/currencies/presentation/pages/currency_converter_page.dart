@@ -2,17 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../core/widgets/loading_widget.dart';
 import '../bloc/currencies/currencies_bloc.dart';
-import '../widgets/currencies_page/currency_list_widget.dart';
+import '../widgets/currencies_page/currency_converter_widget.dart';
 import '../widgets/currencies_page/message_display_widget.dart';
 
-class CurrenciesPage extends StatefulWidget {
-  const CurrenciesPage({Key? key}) : super(key: key);
+class CurrencyConverterPage extends StatefulWidget {
+  const CurrencyConverterPage({Key? key}) : super(key: key);
   @override
-  State<CurrenciesPage> createState() =>
-      _CurrenciesPageState();
+  State<CurrencyConverterPage> createState() =>
+      _CurrencyConverterPageState();
 }
 
-class _CurrenciesPageState extends State<CurrenciesPage> {
+class _CurrencyConverterPageState extends State<CurrencyConverterPage> {
   @override
   void initState() {
     super.initState();
@@ -27,7 +27,7 @@ class _CurrenciesPageState extends State<CurrenciesPage> {
     );
   }
 
-  AppBar _buildAppbar() => AppBar(title:const Text('Currencies'));
+  AppBar _buildAppbar() => AppBar(title:const Text('Currency Converter'));
 
   Widget _buildBody() {
     return Padding(
@@ -37,7 +37,7 @@ class _CurrenciesPageState extends State<CurrenciesPage> {
           if (state is LoadingCurrenciesState) {
             return const LoadingWidget();
           } else if (state is LoadedCurrenciesState) {
-            return  CurrencyListWidget(currencies: state.currencies);
+            return  CurrencyConverterWidget(currencies: state.currencies);
           } else if (state is ErrorCurrenciesState) {
             return MessageDisplayWidget(message: state.message);
           }

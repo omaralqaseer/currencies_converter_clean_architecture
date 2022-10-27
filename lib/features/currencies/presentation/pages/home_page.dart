@@ -1,7 +1,7 @@
-import 'package:currencyconverter_clean_arch/features/currencies/presentation/pages/historical_currencies.dart';
-
-import '/features/currencies/presentation/pages/currencies_page.dart';
 import 'package:flutter/material.dart';
+
+import 'currency_converter_page.dart';
+import 'historical_currencies.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -12,7 +12,7 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   final List<Widget> _currentTab = [
-    const CurrenciesPage(),
+    const CurrencyConverterPage(),
     const HistoricalCurrenciesPage(),
   ];
   int _currentIndex = 0;
@@ -31,7 +31,7 @@ class _HomePageState extends State<HomePage> {
         items: const [
           BottomNavigationBarItem(
             icon: Icon(Icons.currency_exchange),
-            label: 'Currencies',
+            label: 'Currency Converter',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.history),
