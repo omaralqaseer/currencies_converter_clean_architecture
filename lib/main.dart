@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'core/app_theme.dart';
-import 'features/currencies/presentation/bloc/currencies/currencies_bloc.dart';
 import 'dependency_injection/injection_container.dart' as di;
+import 'features/currencies/presentation/bloc/currencies/currencies_bloc.dart';
 import 'features/currencies/presentation/pages/home_page.dart';
 
 void main() async {
